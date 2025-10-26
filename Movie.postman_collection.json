@@ -1,0 +1,43 @@
+{
+	"info": {
+		"_postman_id": "1ca23395-92e1-4682-9a88-462b40c1b2bf",
+		"name": "Movie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49276840",
+		"_collection_link": "https://marvinjunaidi-2327240003-7155314.postman.co/workspace/Marvin's-Workspace~4e7d05d6-eeb4-41f3-89bf-e04fdcd34b08/collection/49276840-1ca23395-92e1-4682-9a88-462b40c1b2bf?action=share&source=collection_link&creator=49276840"
+	},
+	"item": [
+		{
+			"name": "List",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
