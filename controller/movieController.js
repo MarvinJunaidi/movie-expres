@@ -83,7 +83,7 @@ export const deleteMovie = async (req,res)=>{
         }
         const response = await movieModel.findByIdAndDelete(id)
         if(response) {
-            res.status(500).json({
+            res.status(200).json({
                 message : "Data Film Berhasil Dihapus",
                 data: null
             })
