@@ -1,4 +1,4 @@
-import jwt from `jsonwebtoken`
+import jwt from 'jsonwebtoken'
 
 export const getJwtToken = (user_id, username) => {
     const payload = {
@@ -6,7 +6,7 @@ export const getJwtToken = (user_id, username) => {
         username : username
     }
 
-    return jwt.sign(pasyload, "APP_JWT_SECRET", {
+    return jwt.sign(payload, "APP_JWT_SECRET", {
         expiresIn : '15m'
     })
 }

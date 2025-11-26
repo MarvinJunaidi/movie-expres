@@ -85,40 +85,65 @@ export const updateMovie = async (req,res) => {
             });
         }
        
-        const 
+        const updateMovie = await movieModel.findOneAndUpdate({
+            _id:id,
+            createdBy: req.user?.user_id
+        },
+        {judul, tahunRilis, sutradara},
+        {new : true}
+    );
+
+    if (!updateMovie){
+        return res.status(404).json({
+            message : "Movie tidak ditemukan atau akses ditolak",
+            data : null
+        });
+    }
+
+    return res.status(200).json({
+        message : "Berhasil mengupdate movie",
+        data : updateMovie
+    });
+
     }catch (error){
         res.status(500).json({
-            message: error.message,
+            message: "Terjadi kesalahan pada server",
+            error : error.message,
             data: null
-        })
+        });
     }
-}
+};
 
 export const deleteMovie = async (req,res)=>{
-    try{
-        const id = req.params.id
-        if(!id){
-            res.status(204).json({
-                message: "Data Film Wajib Diisi",
-                data: response
-            })
-        }
-        const response = await movieModel.findByIdAndDelete(id)
-        if(response) {
-            res.status(200).json({
-                message : "Data Film Berhasil Dihapus",
+    try {
+        const {id} = req.params;
+        if(!id || !mongoose.Types.ObjectId.isValid(id)) {
+            res.status(400).json({
+                message: "ID tidak valid",
                 data: null
-            })
+            });
         }
-        return res.status(404).json({
-            message: "Data Film Tidak Ditemukan",
-            date: null
-        })
 
+        const deleteMovie = await movieModel.findByIdAndDelete({
+            _id : id,
+            createdBy: req.user?.user_id
+        });
+
+        if(!deleteMovie) {
+            res.status(404).json({
+                message : "Movie tidak ditemukan atau akses ditolak",
+                data: null
+            });
+        }
+        return res.status(200).json({
+            message: "Berhasil menghapus movie",
+            date: deleteMovie
+        });
     }catch (error){
-        res.status(500).json({
-            message : error,
+        return res.status(500).json({
+            message : "Terjadi kesalahan pada server",
+            error : error.message,
             data: null
-        })
+        });
     }
-}
+};

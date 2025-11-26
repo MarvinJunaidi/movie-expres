@@ -5,7 +5,7 @@ import { authenticateTokenMiddleware } from "../middlewares/authenticateTokenMid
 
 const api = express.Router()
 
-api.post("/singin", userContoller.signIn);
+api.post("/signin", userContoller.signIn);
 api.post("/signup", userContoller.signUp);
 
 api.get("/movie",authenticateTokenMiddleware, movieController.movie)

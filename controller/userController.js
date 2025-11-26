@@ -1,5 +1,5 @@
 import UserModel from "../models/userModel.js";
-import { hashedPassword, hashedPassword, verifyPassword } from "../utils/hashUtil.js";
+import { hashedPassword, verifyPassword } from "../utils/hashUtil.js";
 import { getJwtToken } from "../utils/jwtUtil.js";
 
 export const signIn = async (req, res) => {
@@ -55,12 +55,12 @@ export const signUp = async (req, res) => {
             });
         }
 
-        const hashedPassword = await hashedPassword(password);
+        const hashPassword = await hashedPassword(password);
 
         const newUser = await UserModel.create({
             username,
             email,
-            password: hashedPassword
+            password: hashPassword
         });
 
         if (newUser) {
