@@ -1,69 +1,91 @@
 import movieModel from "../models/movieModel.js";
+import mongoose, { mongo } from "mongoose";
 
-
-export const listMovie = async (req,res) => {
-    try{const data = await movieModel.find({})
-    res.status(200).json({
-        message: "Daftar Film:",
-        data : data
-    })
-
-    }catch (error){
-        res.status(500).json({
-            message: error,
-            data: null
-        })
-    }
-}
-
-export const createMovie = async (req,res)=>{
-    try{const request = req.body
-        console.log(request)
-        const response = await movieModel.create({
-            judul : request.judul,
-            tahunRilis : request.tahunRilis,
-            sutradara : request.sutradara,
-        })
-        res.status(201).json({
-            message: "Data Film berhasil ditambahkan",
-            data: response
-        })
-
-    }catch(error){
-        res.status(500).json({
-            error : error.message
-        })
-    }
-}
-
-export const updateMovie = async (req,res) => {
-    try{const id = req.params?.id
-        const request = req.body
-
-        if(!id){
-            return res.status(400).json({
-                message : "Data Wajib Diisi",
-                data: null
-            })
-        }
-        console.log(request)
-        const response = await movieModel.findByIdAndUpdate(id, {
-            judul : request.judul,
-            tahunRilis : request.tahunRilis,
-            sutradara : request.sutradara,
-        })
-
-        if(!response){
-            return res.status(500).json({
-                message: "Data Gagal Diupdate :'(",
-                data: response
-            })
-        }
+export const movie = async (req,res) => {
+    try {
+        const movie = await movieModel.find({
+            createdBy : req.user?.user_id
+        }).sort({ createdAt : -1 });
 
         return res.status(200).json({
-            message: "Data Berhasil Diupdate"
-        })
+            message : "Daftar semua movie",
+            data : movie,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message : "Terjadi kesalahan pada server",
+            error : error.message,
+            data : null,
+        });
+    }
+};
 
+export const addNewMovie = async (req,res) => {
+    try {
+        const { judul, tahunRilis, sutradara} = req.body;
+
+        if (!judul || !tahunRilis || !sutradara) {
+            return res.status(400).json({
+                message : "Semua field (judul, tahunrilis, sutradara) wajib diisi",
+                data : null
+            });
+        }
+
+        const movie = await movieModel.create({judul, tahunRilis, sutradara, createdBy: req.user?.user_id});
+
+        return res.status(201).json({
+            message : "Berhasil menambahkan movie baru",
+            data : movie,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message : "Gagal menambahkan movie",
+            error : error.message,
+            data : null
+        })
+    }
+};
+
+export const detailMovie = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message : "ID tidak valid", data : null});
+        }
+
+        const movie = await movieModel.findOne({
+            _id : id,
+            createdBy : req.user?.user_id,
+        });
+
+        if (!movie) {
+            return res.status(404).json({ message : "Movie tidak ditemukan", data : null});
+        }
+
+        return res.status(200).json({ message : "Detail Movie", data : movie});
+    } catch (error) {
+        return res.status(500).json({
+            message : "Terjadi kesalahan pada server",
+            error : error.message,
+            data : null
+        });
+    }
+};
+
+export const updateMovie = async (req,res) => {
+    try{
+        const {id} = req.params;
+        const { judul, tahunRilis, sutradara} = req.body;
+
+        if(!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                message : "ID tidak valid",
+                data: null
+            });
+        }
+       
+        const 
     }catch (error){
         res.status(500).json({
             message: error.message,
